@@ -1,0 +1,14 @@
+app:
+  name: conv-app
+  components: frontend
+  image: antonlarichev/conv-app
+  version: 1.2
+  replicas: 1
+  port: 80
+  limits:
+    memory: "500Mi"
+    cpu: "300m"
+app_ingress:
+  name_api: conv-api
+  host: conv.test
+  port_api: 3000
