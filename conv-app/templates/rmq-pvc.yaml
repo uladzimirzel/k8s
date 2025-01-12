@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: api-pvc
+  name: {{ .Values.rabbitmq.name }}-pvc
 spec:
   resources:
     requests:
-      storage: 2Gi
+      storage: {{ .Values.rabbitmq.storage }}
   accessModes:
     - ReadWriteOnce

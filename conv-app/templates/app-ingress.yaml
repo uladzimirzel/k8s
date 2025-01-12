@@ -1,13 +1,13 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.app.name }}-ingress
+  name: {{ .Chart.Name }}-ingress
   annotations:
     nginx.ingress.kubernetes.io/add-base-url: "true"
 spec:
   ingressClassName: nginx
   rules:
-  - host: {{ .Values.app_ingress.host }}
+  - host: {{ .Values.ingress.host }}
     http:
       paths:
       - pathType: Prefix
@@ -21,13 +21,13 @@ spec:
         path: "/api"
         backend:
           service:
-            name: {{ .Values.app_ingress.name_api }}-clusterip
+            name: {{ .Values.api.name }}-clusterip
             port:
-              number: {{ .Values.app_ingress.port_api }}
+              number: {{ .Values.api.port }}
       - pathType: Prefix
         path: "/uploads"
         backend:
           service:
-            name: {{ .Values.app_ingress.name_api }}-clusterip
+            name: {{ .Values.api.name }}-clusterip
             port:
-              number: {{ .Values.app_ingress.port_api }}
+              number: {{ .Values.api.port }}

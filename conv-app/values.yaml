@@ -1,3 +1,6 @@
+ingress:
+  host: conv.test
+
 app:
   name: conv-app
   components: frontend
@@ -8,7 +11,71 @@ app:
   limits:
     memory: "500Mi"
     cpu: "300m"
-app_ingress:
-  name_api: conv-api
-  host: conv.test
-  port_api: 3000
+
+api:
+  name: conv-api
+  components: backend
+  replicas: 1
+  image: antonlarichev/conv-api
+  version: "1.0"
+  port: 3000
+  limits:
+    memory: "500Mi"
+    cpu: "500m"
+  storage: 2Gi
+  envs:
+    - AMQP_EXCHANGE
+    - AMQP_USER
+    - AMQP_PASSWORD
+    - AMQP_HOSTNAME
+
+converter:
+  name: conv-service
+  components: service
+  replicas: 1
+  image: antonlarichev/conv-service
+  version: "1.0"
+  port: 4000
+  resources:
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+  envs:
+    - AMQP_EXCHANGE
+    - AMQP_USER
+    - AMQP_PASSWORD
+    - AMQP_HOSTNAME
+    - AMQP_QUEUE
+
+rabbitmq:
+  name: rabbitmq
+  app: rabbitmq
+  replicas: 1
+  image: rabbitmq
+  version: 3.8.34-management
+  ports:
+    aqmp: 5672
+    managment: 15672
+  limits:
+    memory: "800Mi"
+    cpu: "500m"
+  storage: 2Gi
+  envs:
+    - RABBITMQ_DEFAULT_USER
+    - RABBITMQ_DEFAULT_PASS
+  #RABBITMQ_DEFAULT_USER: guest
+  #RABBITMQ_DEFAULT_PASS: guest
+  #AMQP_EXCHANGE: test
+  #AMQP_USER: guest
+  #AMQP_PASSWORD: guest
+  #AMQP_HOSTNAME: rabbitmq
+  #AMQP_QUEUE: converter
+
+#database:
+  #RABBITMQ_DEFAULT_USER: guest
+  #RABBITMQ_DEFAULT_PASS: guest
+  #AMQP_EXCHANGE: test
+  #AMQP_USER: guest
+  #AMQP_PASSWORD: guest
+  #AMQP_HOSTNAME: rabbitmq
+  #AMQP_QUEUE: converter

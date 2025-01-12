@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ .Release.Name }}-test"
+  labels:
+    components: {{ .Values.app.components }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: curl
+      image: curlimages/curl:7.85.0
+      command: ["curl", "-sf", "http://{{ .Values.ingress.host }}:80"]
+  restartPolicy: Never
